@@ -1,5 +1,3 @@
-import React from 'react';
-
 // [추가] 부모에게서 받을 함수 타입 정의
 interface Props {
   onOpenSettings: () => void;

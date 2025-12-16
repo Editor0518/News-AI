@@ -1,5 +1,3 @@
-import React from 'react';
-
 interface Props {
   isOpen: boolean;                  // 모달이 열려있는지 여부
   onClose: () => void;              // 닫기 버튼 눌렀을 때 함수

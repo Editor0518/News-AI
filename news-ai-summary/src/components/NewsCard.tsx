@@ -1,4 +1,3 @@
-import React from 'react';
 import type { NewsItem } from '../types'; // 3단계에서 만든 types.ts 불러오기
 
 interface Props {
