@@ -24,7 +24,7 @@ export default function SettingsModal({ isOpen, onClose, highlight, setHighlight
 
         {/* 1. 요약 길이 선택 (기획서 반영) */}
         <div className="mb-6">
-          {/* [수정] 라벨: 완전 흰색으로 변경 */}
+          {/* 라벨: 완전 흰색으로 변경 */}
           <label className="block text-sm font-semibold text-gray-700 dark:text-white mb-2">요약 길이</label>
           <div className="flex gap-2 p-1 bg-gray-100 dark:bg-gray-700 rounded-lg">
             {['짧게', '기본', '길게'].map((option) => (
@@ -45,7 +45,7 @@ export default function SettingsModal({ isOpen, onClose, highlight, setHighlight
         {/* 2. 음성 속도 */}
         <div className="mb-6">
           <div className="flex justify-between items-center mb-2">
-            {/* [수정] 라벨: 완전 흰색으로 변경 */}
+            {/* 라벨: 완전 흰색으로 변경 */}
             <label className="text-sm font-semibold text-gray-700 dark:text-white">음성 속도</label>
             <span className="text-sm font-bold text-primary">{speechRate.toFixed(1)}x</span>
           </div>
@@ -57,7 +57,7 @@ export default function SettingsModal({ isOpen, onClose, highlight, setHighlight
             className="w-full h-2 bg-gray-200 dark:bg-gray-600 rounded-lg appearance-none cursor-pointer accent-primary"
           />
           
-          {/* [수정] 슬라이더 하단 작은 글씨: 밝은 회색(gray-200)으로 변경 */}
+          {/* 슬라이더 하단 작은 글씨: 밝은 회색(gray-200)으로 변경 */}
           <div className="flex justify-between text-xs text-gray-400 dark:text-gray-200 mt-1">
             <span>느림(0.5)</span>
             <span>보통(1.0)</span>
@@ -67,7 +67,7 @@ export default function SettingsModal({ isOpen, onClose, highlight, setHighlight
 
         {/* 3. 다크 모드 토글 */}
         <div className="mb-6 flex justify-between items-center">
-          {/* [수정] 라벨: 완전 흰색으로 변경 */}
+          {/* 라벨: 완전 흰색으로 변경 */}
           <label className="text-sm font-semibold text-gray-700 dark:text-white">다크 모드</label>
           <button 
             onClick={() => setIsDarkMode(!isDarkMode)}
@@ -83,7 +83,7 @@ export default function SettingsModal({ isOpen, onClose, highlight, setHighlight
 
         {/* 4. 하이라이트 옵션 */}
         <div className="mb-8 flex justify-between items-center">
-          {/* [수정] 라벨: 완전 흰색으로 변경 */}
+          {/* 라벨: 완전 흰색으로 변경 */}
           <label className="text-sm font-semibold text-gray-700 dark:text-white">키워드 하이라이트</label>
           <button 
             onClick={() => setHighlight(!highlight)}

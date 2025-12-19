@@ -37,12 +37,12 @@ export default function NewsCard({ data, showHighlight, speechRate }: Props) {
     const utterance = new SpeechSynthesisUtterance(`${data.title}. ${data.summary}`);
     utterance.lang = 'ko-KR';
     
-    // ✅ 여기서 속도를 적용합니다!
+    // 여기서 속도를 적용합니다!
     utterance.rate = speechRate; 
     
     window.speechSynthesis.speak(utterance);
   };
-  // 3. [추가된 기능] 복사하기 기능
+  // 3. 복사하기 기능
   const handleCopy = async () => {
     try {
       // 클립보드에 텍스트 복사

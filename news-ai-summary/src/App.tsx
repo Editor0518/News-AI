@@ -16,26 +16,26 @@ function App() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [enableHighlight, setEnableHighlight] = useState(true);
 
-  // [추가] 검색어 상태 관리
+  // 검색어 상태 관리
   const [searchTerm, setSearchTerm] = useState("");
   const [isInputModalOpen, setIsInputModalOpen] = useState(false);
 
   const API_URL = "http://localhost:4000/api/news/latest";
 
-  // [추가] 백엔드 개발자가 만들어줄 저장용 API (POST)
+  // 백엔드 개발자가 만들어줄 저장용 API (POST)
   const API_MANUAL_URL = "http://localhost:4000/api/news/manual";
 
-  // [추가] TTS 속도 상태 (기본값: 1.0)
+  // TTS 속도 상태 (기본값: 1.0)
   const [speechRate, setSpeechRate] = useState(1.0);
 
 
-  // [추가] 다크 모드 상태 (로컬 스토리지에서 불러오기)
+  // 다크 모드 상태 (로컬 스토리지에서 불러오기)
   const [isDarkMode, setIsDarkMode] = useState(() => {
     const savedTheme = localStorage.getItem('theme');
     return savedTheme === 'dark';
   });
 
-  // [추가] 다크 모드 변경 시 HTML 태그에 클래스 적용 & 저장
+  // 다크 모드 변경 시 HTML 태그에 클래스 적용 & 저장
   useEffect(() => {
     if (isDarkMode) {
       document.documentElement.classList.add('dark');
@@ -107,7 +107,7 @@ function App() {
     return () => clearInterval(intervalId);
   }, []);
 
-  // [추가] 검색 필터링 로직
+  // 검색 필터링 로직
   // 뉴스 리스트에서 검색어가 포함된 것만 걸러냄
   const filteredNews = newsList.filter((news) => 
     news.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
@@ -150,11 +150,11 @@ function App() {
       {/* [수정] 헤더에 입력창 열기 함수 전달 */}
       <Header 
         onOpenSettings={() => setIsModalOpen(true)} 
-        onOpenInput={() => setIsInputModalOpen(true)} // [추가]
+        onOpenInput={() => setIsInputModalOpen(true)}
       />
 
       <main className="max-w-2xl mx-auto px-4 mt-6">
-        {/* [추가] 1. 검색창 바로 아래에 키워드 트렌드 배치 */}
+        {/* 1. 검색창 바로 아래에 키워드 트렌드 배치 */}
         <KeywordTrend newsList={newsList} />
 
         {/* 검색창 UI */}
@@ -205,7 +205,7 @@ function App() {
                 key={news.id} 
                 data={news} 
                 showHighlight={enableHighlight} 
-                speechRate={speechRate} // [추가] 카드에 속도 설정 전달
+                speechRate={speechRate} // 카드에 속도 설정 전달
               />
             ))
           )}
@@ -229,14 +229,14 @@ function App() {
         isDarkMode={isDarkMode} 
         setIsDarkMode={setIsDarkMode} 
       />
-      {/* [추가] 기사 입력 모달 배치 */}
+      {/* 기사 입력 모달 배치 */}
       <ManualInputModal 
         isOpen={isInputModalOpen}
         onClose={() => setIsInputModalOpen(false)}
         onSubmit={handleManualSubmit}
       />
       <Toaster />
-      {/* [추가] 2. 스크롤 탑 버튼 (화면 구석에 고정됨) */}
+      {/* 2. 스크롤 탑 버튼 (화면 구석에 고정됨) */}
       <ScrollToTop />
     </div>
     
