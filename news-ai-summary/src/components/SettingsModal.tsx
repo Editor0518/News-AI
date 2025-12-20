@@ -6,11 +6,14 @@ interface Props {
   speechRate: number;                // 속도 값 (숫자)
   setSpeechRate: (v: number) => void; // 속도 변경 함수
   isDarkMode: boolean;           
-  setIsDarkMode: (v: boolean) => void; 
+  setIsDarkMode: (v: boolean) => void;
+  //summaryLength: string;
+  //setSummaryLength: (v: string) => void;
+  onClearData: () => void;
 }
 
 export default function SettingsModal({ isOpen, onClose, highlight, setHighlight, 
-  speechRate, setSpeechRate, isDarkMode, setIsDarkMode }: Props) {
+  speechRate, setSpeechRate, isDarkMode, setIsDarkMode, onClearData }: Props) {
   // 모달이 닫혀있으면 아무것도 그리지 않음
   if (!isOpen) return null;
 
@@ -21,10 +24,11 @@ export default function SettingsModal({ isOpen, onClose, highlight, setHighlight
       {/* 모달 창 본체 */}
       <div className="bg-white dark:bg-gray-800 w-[90%] max-w-sm rounded-xl shadow-2xl p-6 animate-fade-in transition-colors duration-300">
         <h2 className="text-xl font-bold mb-6 text-gray-900 dark:text-white">설정</h2>
-
-        {/* 1. 요약 길이 선택 (기획서 반영) */}
+        
+        {/* 삭제됨
+        // 1. 요약 길이 선택 (기획서 반영) 
         <div className="mb-6">
-          {/* 라벨: 완전 흰색으로 변경 */}
+          //라벨: 완전 흰색으로 변경
           <label className="block text-sm font-semibold text-gray-700 dark:text-white mb-2">요약 길이</label>
           <div className="flex gap-2 p-1 bg-gray-100 dark:bg-gray-700 rounded-lg">
             {['짧게', '기본', '길게'].map((option) => (
@@ -41,6 +45,7 @@ export default function SettingsModal({ isOpen, onClose, highlight, setHighlight
             ))}
           </div>
         </div>
+            */}
 
         {/* 2. 음성 속도 */}
         <div className="mb-6">
@@ -99,10 +104,27 @@ export default function SettingsModal({ isOpen, onClose, highlight, setHighlight
 
         <button 
           onClick={onClose}
-          className="w-full py-3 bg-primary text-white rounded-lg font-bold hover:bg-primary-dark transition-colors"
+          className="w-full py-3 bg-primary text-white rounded-lg font-bold hover:bg-primary-dark transition-colors mb-8"
         >
           확인
         </button>
+
+        {/* 구분선 (선택 사항: 원하시면 주석 해제해서 사용하세요) */}
+        <div className="border-t border-gray-200 dark:border-gray-700 mb-6"></div>
+
+        {/* 데이터 초기화 버튼 (붉은색) */}
+        <button 
+          onClick={() => {
+            if(window.confirm('저장된 모든 뉴스 데이터를 삭제하시겠습니까?')) {
+              onClearData();
+              onClose();
+            }
+          }}
+          className="w-full py-3 border border-red-200 text-red-500 rounded-lg font-bold hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors text-sm"
+        >
+          🗑️ 저장된 데이터 모두 삭제
+        </button>
+
       </div>
     </div>
   );

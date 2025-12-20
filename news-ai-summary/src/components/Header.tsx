@@ -8,7 +8,11 @@ interface Props {
 export default function Header({ onOpenSettings, onOpenInput }: Props) {
   return (
     <header className="sticky top-0 z-50 w-full bg-white dark:bg-gray-800 border-b border-border dark:border-gray-700 px-4 py-3 flex justify-between items-center shadow-sm transition-colors duration-300">
-      <h1 className="text-xl font-bold text-gray-900 dark:text-white tracking-tight">
+      <h1 
+        onClick={() => window.location.reload()}
+        className="text-xl font-bold text-gray-900 dark:text-white tracking-tight cursor-pointer hover:opacity-80 transition-opacity"
+        title="페이지 새로고침"
+      >
         NewsAI <span className="text-primary">요약</span>
       </h1>
       
