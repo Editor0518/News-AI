@@ -121,7 +121,6 @@ API 주소는 `App.tsx` 내부에 설정되어 있습니다.
 **App.tsx**
 
 ```typescript
-// 기획자의 실제 배포 서버 주소 사용
 const API_BASE_URL = "https://news-gpt-backend.onrender.com/api/news";
 
 ```
