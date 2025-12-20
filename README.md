@@ -3,6 +3,8 @@
 **NewsAI Frontend**는 AI가 요약한 최신 뉴스를 실시간으로 제공하는 웹 애플리케이션입니다.
 React와 TypeScript로 구축되었으며, 사용자 편의를 위한 다크 모드, TTS(음성 듣기), 키워드 트렌드 분석 등의 다양한 인터랙티브 기능을 제공합니다.
 
+현재 **실제 배포된 백엔드 서버**와 연동되어 있어, 별도의 로컬 백엔드 실행 없이 바로 뉴스를 확인할 수 있습니다.
+
 ## ✨ 주요 기능 (Key Features)
 
 * **📰 실시간 뉴스 피드**: 5초마다 자동으로 최신 뉴스를 폴링(Polling)하여 업데이트합니다.
@@ -10,7 +12,9 @@ React와 TypeScript로 구축되었으며, 사용자 편의를 위한 다크 모
 * **📈 키워드 트렌드**: 현재 뉴스 리스트에서 가장 많이 등장한 핵심 키워드 Top 5를 시각화합니다.
 * **🌙 다크 모드 지원**: 사용자 환경에 맞춰 라이트/다크 모드를 전환하며, 설정을 로컬 스토리지에 저장합니다.
 * **🔊 TTS (음성 듣기)**: Web Speech API를 활용하여 뉴스 요약 내용을 음성으로 읽어줍니다 (속도 조절 가능).
-* **✍️ 기사 직접 추가**: 사용자가 직접 기사 원문과 정보를 입력하여 요약(AI 처리 가정) 요청을 보낼 수 있습니다.
+* **🔄 간편 새로고침**: 좌측 상단 로고 클릭 시 페이지를 새로고침하여 초기 상태로 되돌립니다.
+* **🚧 기사 직접 추가 (UI)**: 사용자가 직접 기사를 추가하는 모달 UI를 제공합니다. (현재 기능 준비 중으로, 클릭 시 안내 메시지가 표시됩니다.)
+* **🗑️ 데이터 관리**: 설정 메뉴에서 로컬에 저장된 모든 뉴스 데이터를 즉시 초기화할 수 있습니다.
 * **⚡ 사용자 편의성**:
 * 중요 키워드 **하이라이트**
 * 기사 내용 **클립보드 복사**
@@ -59,7 +63,7 @@ npm run dev
 
 브라우저에서 `http://localhost:5173` (Vite 기본 포트)으로 접속하여 확인합니다.
 
-> **Note**: 정상적인 데이터 표시를 위해서는 **백엔드 서버**가 `http://localhost:4000`에서 실행 중이어야 합니다.
+> **Note**: 백엔드 서버가 이미 배포(`https://news-gpt-backend.onrender.com`)되어 있으므로, 프론트엔드만 실행하면 즉시 데이터가 표시됩니다.
 
 ---
 
@@ -68,15 +72,15 @@ npm run dev
 ```bash
 src/
 ├── components/
-│   ├── Header.tsx           # 상단 헤더 (설정 및 추가 버튼)
+│   ├── Header.tsx           # 상단 헤더 (로고 클릭 새로고침, 추가/설정 버튼)
 │   ├── NewsCard.tsx         # 개별 뉴스 카드 (TTS, 복사, 하이라이트 기능)
 │   ├── KeywordTrend.tsx     # 뉴스 키워드 빈도 분석 및 시각화
 │   ├── SkeletonCard.tsx     # 데이터 로딩 시 보여줄 스켈레톤 UI
-│   ├── SettingsModal.tsx    # 설정 모달 (다크모드, TTS 속도 등)
-│   ├── ManualInputModal.tsx # 기사 직접 추가 모달
+│   ├── SettingsModal.tsx    # 설정 모달 (다크모드, TTS 속도, 데이터 삭제)
+│   ├── ManualInputModal.tsx # 기사 직접 추가 모달 (UI)
 │   └── ScrollToTop.tsx      # 맨 위로 가기 버튼
 ├── types.ts                 # TypeScript 인터페이스 정의 (NewsItem 등)
-├── App.tsx                  # 메인 로직 (상태 관리, API 호출, 라우팅)
+├── App.tsx                  # 메인 로직 (오토 폴링, 상태 관리, API 호출)
 ├── main.tsx                 # Entry Point
 └── index.css                # Tailwind CSS 설정
 
@@ -86,49 +90,39 @@ src/
 
 ## 🔗 API 연동 (API Integration)
 
-이 프론트엔드는 백엔드 서버(`http://localhost:4000`)와 REST API로 통신합니다.
-API 호출 로직은 `App.tsx` 내부에 구현되어 있습니다.
+이 프론트엔드는 배포된 백엔드 서버와 REST API로 통신합니다.
+
+* **Base URL**: `https://news-gpt-backend.onrender.com/api/news`
 
 ### 1. 최신 뉴스 조회 (Polling)
 
-* **Endpoint**: `GET /api/news/latest`
+* **Endpoint**: `GET /latest`
+* **Parameter**: `?keyword={검색어}` (기본값: AI)
 * **Description**: 서버로부터 최신 뉴스 요약 목록을 받아옵니다.
 * **Logic**:
-* 앱 실행 시 최초 로드
-* `setInterval`을 통해 **5초마다** 새로운 뉴스를 확인하고 리스트 상단에 추가합니다.
-* `localStorage`를 활용해 새로고침 후에도 데이터를 유지합니다.
+* 앱 실행 시 최초 로드 및 검색 시 호출
+* `setInterval`을 통해 **5초마다** 새로운 뉴스를 확인합니다.
+* **제목(Title) 기반 중복 제거** 로직을 통해 동일한 뉴스가 중복 적재되는 것을 방지합니다.
 
 
 
-### 2. 뉴스 수동 생성
+### 2. 뉴스 수동 생성 (준비 중)
 
-* **Endpoint**: `POST /api/news/manual`
-* **Description**: 사용자가 입력한 기사 정보를 서버로 전송하여 리스트에 추가합니다.
-* **Request Body**:
-```json
-{
-  "title": "사용자가 입력한 제목",
-  "content": "기사 본문 내용...",
-  "press": "신문사 이름",
-  "time": "2024-05-21 10:00"
-}
-
-```
-
-
-* **Response**: 생성된 단일 뉴스 객체 (리스트 최상단에 즉시 반영됨)
+* **Endpoint**: `POST /manual`
+* **Status**: 🚧 **Pending Implementation**
+* **Logic**: 현재 프론트엔드에서는 UI만 구현되어 있으며, 전송 버튼 클릭 시 "추후 추가될 기능입니다"라는 Toast 알림을 표시합니다.
 
 ---
 
 ## ⚙️ 설정 및 환경 변수
 
-현재 API 주소는 `App.tsx` 내부에 하드코딩 되어 있습니다. 배포 시 변경이 필요할 수 있습니다.
+API 주소는 `App.tsx` 내부에 설정되어 있습니다.
 
 **App.tsx**
 
 ```typescript
-const API_URL = "http://localhost:4000/api/news/latest";
-const API_MANUAL_URL = "http://localhost:4000/api/news/manual";
+// 기획자의 실제 배포 서버 주소 사용
+const API_BASE_URL = "https://news-gpt-backend.onrender.com/api/news";
 
 ```
 
